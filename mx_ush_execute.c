@@ -44,16 +44,18 @@ int (*builtin_func[]) (char **) = {
     &lsh_exit
 };
 
-int mx_ush_execute(char **args) {
+int mx_ush_execute(t_lst *head, t_env *b) {
     char *builtin_str[] = {"cd", "help", "exit"};
-
-    if (args[0] == NULL)
+    if (head->cmd == NULL)
         return 1;
-        
+    if (strcmp(head->cmd, "envp") == 0) {
+        return mx_env(head, b);
+    }
+
     for (int i = 0; i < lsh_num_builtins(); i++) {
-        if (strcmp(args[0], builtin_str[i]) == 0) {
-          return (*builtin_func[i])(args);
+        if (strcmp(head->cmd, builtin_str[i]) == 0) {
+          return (*builtin_func[i])(&head->cmd);
         }
     }
-    return mx_ush_launch(args);
+    return mx_ush_launch(&head->cmd);
 }

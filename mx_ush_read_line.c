@@ -13,10 +13,8 @@ char *mx_ush_read_line(void) {
     }
 
     while (1) {
-        // Read a character
         c = getchar(); // One simbol of string
 
-        // EOF == end of file
         if (c == EOF || c == '\n') {
             buffer[position] = '\0';
             return buffer;
@@ -25,8 +23,7 @@ char *mx_ush_read_line(void) {
             buffer[position] = c;
         }
         position++;
-
-        // If we have exceeded the buffer, reallocate.
+        
         if (position >= bufsize) {
             bufsize += LSH_RL_BUFSIZE;
             buffer = realloc(buffer, bufsize);
