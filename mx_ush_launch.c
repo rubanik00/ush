@@ -1,24 +1,31 @@
 #include "ush.h"
 
-int mx_ush_launch(char **args) {
-    pid_t pid;
-    pid_t wpid;
-    int status;
+static int choose_exec(char **args, char **env) {
+    if (!env)
+        return execvp(args[0], args);
+    else 
+        return execve(args[0], args, env);
+}
 
-    pid = fork();
-    if (pid == 0) {
-        // Child process
-        if (execvp(args[0], args) == -1)
-            perror("ush");
-        exit(EXIT_FAILURE);
-    } 
-    else if (pid < 0) {
-        // Error forking
-        perror("ush");
+int mx_ush_launch(char **args, char **env) {
+    int status = 0;
+    pid_t pid = fork();
+
+    if (!pid) {
+        if ((status = choose_exec(args, env)) < 0) {
+            mx_printstr("ERROR\n");
+            return 0;
+        }
+        exit(status);
+    }
+    if (pid < 0) {
+        mx_printerr("ush: error starting a new proccess: ");
+        mx_printerr(args[0]);
     }
     else {
-        // Parent process
-        wpid = waitpid(pid, &status, WUNTRACED);
+        waitpid(pid, &status, WUNTRACED);
+        while (!WIFEXITED(status) && !WIFSIGNALED(status))
+            waitpid(pid, &status, WUNTRACED);
     }
-    return 1;
+    return status;
 }
