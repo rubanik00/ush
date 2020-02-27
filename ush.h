@@ -14,9 +14,10 @@
 
 typedef struct s_lst {
     // Exampl comand "cd libmx && ls -l -a"
-    char *cmd; // cd
+    char **args;
+    char **cmd; // cd
     char **av; // libmx 
-    char **env;
+    char **env; //env info
     struct s_lst *next; // cmd = ls av = -l -a 
 } t_lst;
 
@@ -30,11 +31,12 @@ typedef struct s_env {
 void mx_ush_loop(void);
 char **mx_ush_split_line(char *line);
 char *mx_ush_read_line(void);
-int mx_ush_launch(char **args, char **env);
+int mx_ush_launch(t_lst *head);
 int mx_ush_execute(t_lst *head);
 
+
 // ENV START
-int mx_env(t_lst *head, char **env);
+char **mx_env(t_lst *head);
 
 //Node env
 t_env *mx_create_node_env(char *envp);
@@ -46,5 +48,7 @@ t_env *mx_copy_env(t_env **en, char **envp);
 char **mx_env_copy(void);
 
 // ENV END
+// Exit
+int mx_exit(char **args);
 
 #endif
