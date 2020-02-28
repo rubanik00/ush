@@ -3,21 +3,28 @@
 static int choose_exec(t_lst *head) {
     char **new_env;
     int status = 0;
-
+    t_env *env = malloc(sizeof(t_env));
+    
     if (strcmp(head->args[0], "env") == 0) {
-        new_env = mx_env(head);
-        if (new_env == NULL)
+        env = mx_parse_env(head->args);
+
+        new_env = mx_env(head, env);
+
+        if (new_env == NULL) {
             return 1;
-        else
-            status = execve(head->args[0], head->av, head->cmd);
+        }
+        else {
+            status = execve(head->p_name, head->proces, head->stream);
+        }
+        mx_del_strarr(&head->proces);
+        mx_del_strarr(&head->stream);
         mx_del_strarr(&new_env);
     }
     else {
         if ((status = execvp(head->args[0], head->args)) == -1)
-            mx_printerr("ERROR");
+            mx_printerr("ERROR\n");
         exit(0);
     }
-
     return status;
 }
 

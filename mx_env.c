@@ -23,68 +23,100 @@ static void check_valid_av(char *av) {
     }
 }
 
-static char **mx_reassign(t_lst *head, int index) {
-    head->args[0] = mx_strjoin("/bin/", head->args[index]); // "/bin/sh"
-    head->av[0] = head->args[index];                        // "{sh, NULL}"
-    head->av[1] = NULL;
-    head->cmd[0] = "A=B";                                   // "{A=B, NULL}"
-    head->cmd[1] = NULL;
+// static char **mx_reassign(t_lst *head) {
+//     head->proces = malloc(sizeof(char) * 3);
+//     head->stream = malloc(sizeof(char) * 3);
 
-    return head->cmd; 
+//     head->p_name = mx_strjoin("/bin/", head->args[index]); // "/bin/sh"
+    
+//     head->proces[0] = head->args[index];
+
+//     head->proces[1] = NULL;
+
+//     head->stream[0] = NULL;
+//     head->stream[1] = NULL;
+
+//     return head->stream; 
+// }
+
+static void print_env(t_env *env) {
+    for (int i = 0; env->stream_name[i]; i++) { 
+        check_valid_av(env->stream_name[i]);
+        mx_printstr(env->stream_name[i]);
+        mx_printchar('\n');
+    }
 }
 
-char **mx_env(t_lst *head) {
+char **mx_env(t_lst *head, t_env *env) {
     int i = 0;
 
-    if (!head->args[0])
-        return NULL;
+    // if (!head->args[0])
+    //     return NULL;
     
-    while (head->args[i]) {
-        if (strcmp(head->args[i], "sh") == 0 
-            || strcmp(head->args[i], "bash") == 0) {
-                return mx_reassign(head, i);
-        }
-        i++;
-    }
-    i = 0;
-
-    if (!head->args[1]) {
+    // while (head->args[i]) {
+    //     if (strcmp(head->args[i], "sh") == 0 
+    //         || strcmp(head->args[i], "bash") == 0) {
+    //             return mx_reassign(head, i);
+    //     }
+    //     i++;
+    // }
+    // if (env->util) { // sh || bash
+    //     return mx_reassign(head);
+    // }
+    if (!head->args[1]) { // prosto env
         mx_print_strarr(head->env, "\n");
         return NULL;
     }
-    else if (strcmp(head->args[1], "-i") == 0) {
-        for (i = 2; head->args[i]; i++) {
-            check_valid_av(head->args[i]);
-            if (head->args[i]) {
-                mx_printstr(head->args[i]);
-                mx_printchar('\n');
-            }
-            else {
-                return NULL;
-            }
-        }
-    }
-    else {
-        i = 1;
-        while (head->args[i]){
-            i++;
-        }
-        if (i > 0) {
-            mx_print_strarr(head->env, "\n");
-            for (i = 1; head->args[i]; i++) {
-                if (head->args[i]) {
-                    mx_printstr(head->args[i]);
-                    mx_printchar('\n');
-                }
-                else {
-                    return NULL;
-                }
-            }
-        }
-        else {
-            mx_print_strarr(head->env, "\n");
+    else if (env->i == 1) {
+        if (!env->stream_name) {
             return NULL;
         }
+        // else if (env->util)
+        //     mx_parse_util();
+        else {
+            print_env(env);
+            return NULL;
+        }
+        // for (i = 2; head->args[i]; i++) {
+        //     check_valid_av(head->args[i]);
+        //     if (head->args[i]) {
+        //         mx_printstr(head->args[i]);
+        //         mx_printchar('\n');
+        //     }
+        //     else {
+        //         return NULL;
+        //     }
+        // }
+    }
+    else {
+        // if (env->util)
+        //     mx_parse_util();
+        mx_print_strarr(head->env, "\n");
+        if (env->stream_name) {
+           print_env(env); 
+        }
+        return NULL;
+        
+        // i = 1;
+        // while (head->args[i]){
+        //     i++;
+        // }
+        // if (i > 0) {
+        //     mx_print_strarr(head->env, "\n");
+        //     for (i = 1; head->args[i]; i++) {
+        //         if (head->args[i]) {
+        //             mx_printstr(head->args[i]);
+        //             mx_printchar('\n');
+        //         }
+        //         else {
+        //             return NULL;
+        //         }
+        //     }
+        // }
+        // else {
+        //     mx_print_strarr(head->env, "\n");
+        //     return NULL;
+        // }
     }
     return NULL;
 }

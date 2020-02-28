@@ -13,18 +13,28 @@
 #define LSH_TOK_DELIM " \t\r\n\a"
 
 typedef struct s_lst {
-    // Exampl comand "cd libmx && ls -l -a"
     char **args;
-    char **cmd; // cd
-    char **av; // libmx 
-    char **env; //env info
-    struct s_lst *next; // cmd = ls av = -l -a 
+
+    char **cmd;
+    char **av;
+
+    char *p_name; // For new process (for example sh or bash)
+    char **proces;
+    char **stream;
+
+    char **env;
+    struct s_lst *next;
 } t_lst;
 
 typedef struct s_env {
+    bool i;
+    char *P;
+    char *u;
+    char **stream_name;
+    char *util;
+    char error;
     char *key;
     char *val;
-    struct s_env *next;
 } t_env;
 
 // Main loop
@@ -36,7 +46,8 @@ int mx_ush_execute(t_lst *head);
 
 
 // ENV START
-char **mx_env(t_lst *head);
+char **mx_env(t_lst *head, t_env *env);
+t_env *mx_parse_env(char **args);
 
 //Node env
 t_env *mx_create_node_env(char *envp);
