@@ -7,24 +7,22 @@ static int choose_exec(t_lst *head) {
     
     if (strcmp(head->args[0], "env") == 0) {
         env = mx_parse_env(head->args);
-
         new_env = mx_env(head, env);
 
-        if (new_env == NULL) {
+        if (new_env == NULL)
             return 1;
-        }
         else {
-            status = execve(head->p_name, head->proces, head->stream);
+            status = execve(env->u_name, env->u_flag, new_env);
+            mx_strdel(env->u_flag);
+            mx_strdel(env->stream_name);
         }
-        mx_del_strarr(&head->proces);
-        mx_del_strarr(&head->stream);
-        mx_del_strarr(&new_env);
     }
     else {
         if ((status = execvp(head->args[0], head->args)) == -1)
             mx_printerr("ERROR\n");
         exit(0);
     }
+    free(env);
     return status;
 }
 

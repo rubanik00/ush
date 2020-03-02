@@ -14,14 +14,6 @@
 
 typedef struct s_lst {
     char **args;
-
-    char **cmd;
-    char **av;
-
-    char *p_name; // For new process (for example sh or bash)
-    char **proces;
-    char **stream;
-
     char **env;
     struct s_lst *next;
 } t_lst;
@@ -32,33 +24,25 @@ typedef struct s_env {
     char *u;
     char **stream_name;
     char *util;
+    char *u_name;
+    char **u_flag;
     char error;
-    char *key;
-    char *val;
 } t_env;
 
 // Main loop
 void mx_ush_loop(void);
 char **mx_ush_split_line(char *line);
 char *mx_ush_read_line(void);
-int mx_ush_launch(t_lst *head);
 int mx_ush_execute(t_lst *head);
-
+int mx_ush_launch(t_lst *head);
 
 // ENV START
-char **mx_env(t_lst *head, t_env *env);
-t_env *mx_parse_env(char **args);
-
-//Node env
-t_env *mx_create_node_env(char *envp);
-void mx_push_front_env(t_env **ptr, char *envp);
-void mx_push_back_env(t_env **ptr, char *envp);
-
-//Copy env
-t_env *mx_copy_env(t_env **en, char **envp);
 char **mx_env_copy(void);
-
+t_env *mx_parse_env(char **args);
+char **mx_env(t_lst *head, t_env *env);
+char **mx_do_util(t_env *env);
 // ENV END
+
 // Exit
 int mx_exit(char **args);
 

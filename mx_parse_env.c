@@ -30,8 +30,9 @@ static int process_flags(t_env *setup, char **args, int *i) {
             setup->error = args[*i][j];
             return 1;
         }
-        if (args[*i][j] == 'i')
+        if (args[*i][j] == 'i') {
             setup->i = true;
+        }
         if (args[*i][j] == 'P' || args[*i][j] == 'u' ) {
             step = save_arg(setup, args, *i, j, args[*i][j]);
             *i += step;
@@ -68,12 +69,11 @@ t_env *mx_parse_env(char **args) {
     int flag_stop = 0;
     int name_val_len = 0;
 
-    for (int i = 1; args[i]; i++)
-        if (!mx_strcmp("--", args[i]))
-            flag_stop = 1;
-        else if (args[i][0] == '-' && flag_stop == 0) {
-            if (process_flags(setup, args, &i) == 1)
+    for (int i = 1; args[i]; i++) {
+        if (args[i][0] == '-' && flag_stop == 0) {
+            if (process_flags(setup, args, &i) == 1) {
                 return setup;
+            }
         }
         else if (mx_get_char_index(args[i], '=') != -1) {
             flag_stop = 1;
@@ -84,5 +84,6 @@ t_env *mx_parse_env(char **args) {
             setup->util = mx_strdup(args[i]);
             break;
         }
+    }
     return setup;
 }
