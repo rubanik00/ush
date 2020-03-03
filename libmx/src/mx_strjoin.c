@@ -14,6 +14,7 @@ char *mx_strjoin(char const *s1, char const *s2) {
 	str_1 = mx_strdup(s1);
 	str_2 = mx_strdup(s2);
 	concatenated_str = mx_strcat(str_1, str_2);
+	
 	if (concatenated_str == NULL) {
 		return NULL;
 	}

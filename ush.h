@@ -40,7 +40,7 @@ int mx_ush_launch(t_lst *head);
 char **mx_env_copy(void);
 t_env *mx_parse_env(char **args);
 char **mx_env(t_lst *head, t_env *env);
-char **mx_do_util(t_env *env);
+char **mx_do_util(t_lst *head, t_env *env);
 // ENV END
 
 // Exit

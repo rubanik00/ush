@@ -13,13 +13,11 @@ static int choose_exec(t_lst *head) {
             return 1;
         else {
             status = execve(env->u_name, env->u_flag, new_env);
-            mx_strdel(env->u_flag);
-            mx_strdel(env->stream_name);
         }
     }
     else {
         if ((status = execvp(head->args[0], head->args)) == -1)
-            mx_printerr("ERROR\n");
+            mx_printerr("ERROR2\n");
         exit(0);
     }
     free(env);
@@ -32,7 +30,7 @@ int mx_ush_launch(t_lst *head) {
 
     if (pid == 0) {
         if ((status = choose_exec(head)) < 0) {
-            mx_printstr("ERROR\n");
+            mx_printstr("ERROR1\n");
             return 0;
         }
         exit(status);

@@ -28,10 +28,21 @@ static void print_env(t_env *env) {
     }
 }
 
+static void print_error(t_env *env) {
+        mx_printerr("env: illegal option -- ");
+        mx_printchar(env->error);
+        mx_printchar('\n');
+        mx_printerr("usage: env [-iv] [-P utilpath] [-S string] [-u name]\n");
+        mx_printerr("\t   [name=value ...] [utility [argument ...]]\n");
+}
+
 char **mx_env(t_lst *head, t_env *env) {
-    
+    if (env->error) {
+        print_error(env);
+        return NULL;
+    }
     if (env->util)
-        return mx_do_util(env);
+        return mx_do_util(head, env);
     if (!head->args[1]) {
         mx_print_strarr(head->env, "\n");
         return NULL;
