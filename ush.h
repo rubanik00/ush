@@ -27,6 +27,10 @@ typedef struct s_env {
     char *u_name;
     char **u_flag;
     char error;
+    char **key;
+    char **val;
+
+    struct s_env *next;
 } t_env;
 
 // Main loop
@@ -37,12 +41,14 @@ int mx_ush_execute(t_lst *head);
 int mx_ush_launch(t_lst *head);
 
 // ENV START
+t_env *mx_create_env(char *env);
 char **mx_env_copy(void);
 t_env *mx_parse_env(char **args);
 char **mx_env(t_lst *head, t_env *env);
 char **mx_do_util(t_lst *head, t_env *env);
 // ENV END
-
+char **mx_strarr_dup(char **str);
+char **mx_strarr_join(char **s1, char **s2);
 // Exit
 int mx_exit(char **args);
 

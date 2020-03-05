@@ -60,6 +60,8 @@ char *mx_strtrim(const char *str);
 char **mx_strsplit(const char *s, char c);
 char *mx_strjoin(const char *s1, const char *s2);
 char *mx_file_to_str(const char *file);
+char **mx_strarr_dup(char **str);
+char **mx_strarr_join(char **s1, char **s2);
 
 // Memory pack
 

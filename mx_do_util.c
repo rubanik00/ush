@@ -1,6 +1,6 @@
 #include "ush.h"
 
-static char **mx_strarr_dup(char **str) {
+char **mx_strarr_dup(char **str) {
     int len = 0;
 
     while (str[len])
@@ -13,7 +13,7 @@ static char **mx_strarr_dup(char **str) {
     return target;
 }
 
-static char **mx_strarr_join(char **s1, char **s2) {
+char **mx_strarr_join(char **s1, char **s2) {
     char **new_arr = mx_strarr_dup(s1);
     int len_s1 = 0;
     int len_s2 = 0;
@@ -40,11 +40,8 @@ char **mx_do_util(t_lst *head, t_env *env) {
     int k = 0;
     int j = 0;
 
-
-
     env->u_flag = malloc(sizeof(char *) * 10);
     env->u_name = mx_strjoin("/bin/", env->util);
-
     while (strcmp(head->args[i], env->util) < 0) 
         i++;
     if (mx_strcmp(env->util, "bash") == 0) {
@@ -54,13 +51,11 @@ char **mx_do_util(t_lst *head, t_env *env) {
     }
     for (j = i; head->args[j]; j++, k++)
         env->u_flag[k] = mx_strdup(head->args[j]);
-    if (!env->stream_name && env->i == 0) {
+    if (!env->stream_name && env->i == 0)
         return head->env;
-    }
     else if (env->stream_name && env->i == 0)
         env->stream_name = mx_strarr_join(env->stream_name, head->env);
-    else if (env->i == 1 && !env->stream_name) {
+    else if (env->i == 1 && !env->stream_name)
         env->stream_name = malloc(sizeof(char*) * 1);
-    }
     return env->stream_name;
 }

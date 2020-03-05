@@ -20,7 +20,7 @@ static void check_valid_av(char *av) {
     }
 }
 
-static void print_env(t_env *env) {
+static void print_stream_env(t_env *env) {
     for (int i = 0; env->stream_name[i]; i++) { 
         check_valid_av(env->stream_name[i]);
         mx_printstr(env->stream_name[i]);
@@ -29,11 +29,24 @@ static void print_env(t_env *env) {
 }
 
 static void print_error(t_env *env) {
-        mx_printerr("env: illegal option -- ");
-        mx_printchar(env->error);
-        mx_printchar('\n');
-        mx_printerr("usage: env [-iv] [-P utilpath] [-S string] [-u name]\n");
-        mx_printerr("\t   [name=value ...] [utility [argument ...]]\n");
+    mx_printerr("env: illegal option -- ");
+    mx_printchar(env->error);
+    mx_printchar('\n');
+    mx_printerr("usage: env [-iv] [-P utilpath] [-S string] [-u name]\n");
+    mx_printerr("\t   [name=value ...] [utility [argument ...]]\n");
+}
+
+static int cheack_u (t_env *env) {
+    for (int i = 0; env->u[i]; i++) {
+        if (env->u[i] == '=') {
+            mx_printerr("env: unsetenv ");
+            mx_printstr(env->u);
+            mx_printerr(": Invalid argument\n");
+            exit (1);
+            return 0;
+        }
+    }
+    return 1;
 }
 
 char **mx_env(t_lst *head, t_env *env) {
@@ -48,19 +61,31 @@ char **mx_env(t_lst *head, t_env *env) {
         return NULL;
     }
     else if (env->i == 1) {
-        if (!env->stream_name) {
+        if (!env->stream_name)
             return NULL;
-        }
         else {
-            print_env(env);
+            print_stream_env(env);
             return NULL;
         }
     }
+    else if (env->u) {
+        if (cheack_u(env) == 0)
+            return NULL;
+        for (int i = 0; head->env[i]; i++) {
+            if (strncmp(head->env[i], env->u, strlen(env->u)) == 0)
+                i++;
+            else {
+                mx_printstr(head->env[i]);
+                mx_printstr("\n");
+            }
+        }
+        if (env->stream_name)
+            print_stream_env(env);
+    }
     else {
         mx_print_strarr(head->env, "\n");
-        if (env->stream_name) {
-           print_env(env); 
-        }
+        if (env->stream_name)
+           print_stream_env(env); 
         return NULL;
     }
     return NULL;
