@@ -13,7 +13,7 @@ static int choose_exec(t_lst *head) {
             return 1;
         else {
             status = execve(env->u_name, env->u_flag, new_env);
-            if (env->i == 1 && !env->stream_name)
+            if ((env->i == 1 && !env->stream_name) || env->util[0] == '/' || env->P)
                 mx_strdel(env->stream_name);
         }
     }

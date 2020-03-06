@@ -26,11 +26,8 @@ typedef struct s_env {
     char *util;
     char *u_name;
     char **u_flag;
+    char *P_name;
     char error;
-    char **key;
-    char **val;
-
-    struct s_env *next;
 } t_env;
 
 // Main loop

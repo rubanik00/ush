@@ -36,7 +36,7 @@ static void print_error(t_env *env) {
     mx_printerr("\t   [name=value ...] [utility [argument ...]]\n");
 }
 
-static int cheack_u (t_env *env) {
+static int cheack_u(t_env *env) {
     for (int i = 0; env->u[i]; i++) {
         if (env->u[i] == '=') {
             mx_printerr("env: unsetenv ");
