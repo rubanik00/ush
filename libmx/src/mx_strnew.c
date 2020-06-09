@@ -5,7 +5,7 @@ char *mx_strnew(const int size) {
 
 	if (size < 0)
 		return NULL;
-	target = (char*)malloc((size + 1) * sizeof(char));
+	target = malloc((size + 1) * sizeof(char));
 	if (target == NULL)
 		return NULL;
 	for (int i = 0; i < size + 1; i++) {
